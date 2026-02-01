@@ -1,0 +1,442 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Birthday Museum & Surprise ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <div class="sparkles-bg"></div>
+    <div id="particle-container"></div>
+
+    <div id="pass-overlay">
+        <div id="pass-container" class="glass-card">
+            <div class="photo-frame"><img src="https://i.postimg.cc/sXyMtTSf/IMG-20251228-WA0033.jpg" alt="Profile"></div>
+            <div class="quote-text">"Lakho log milenge duniya mein, par tum aachiii piyarii lakdii jesi best friend nhi mili aek chota sa gift mere payarii si medemjii ke liye"</div>
+            
+            <div class="timer-box" id="countdown-timer">
+                <div class="timer-segment"><span class="timer-val" id="days">00</span><span class="timer-label">Days</span></div>
+                <div class="timer-segment"><span class="timer-val" id="hours">00</span><span class="timer-label">Hrs</span></div>
+                <div class="timer-segment"><span class="timer-val" id="mins">00</span><span class="timer-label">Mins</span></div>
+                <div class="timer-segment"><span class="timer-val" id="secs">00</span><span class="timer-label">Secs</span></div>
+            </div>
+
+            <input type="password" id="entryPass" placeholder="Secret Code..." disabled>
+            <br>
+            <button class="unlock-btn ripple" id="unlockBtn" onclick="verify()" disabled>Locked 🔒</button>
+            <p id="hint" style="display:none; color:#ffb7ce; margin-top:10px; font-weight:bold;">Hint: i am your which boy? 😉</p>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <h1 class="glow-text">Museum of Our Friendship 🏛️</h1>
+        <p class="fade-in-text">Har photo ek kahani hai, har kahani me tumhara lakdi jesa sharir h.... ✨</p>
+        
+        <div class="gallery-container">
+            <div class="polaroid hover-lift" onclick="showImg(this)"><img src="https://i.postimg.cc/Qx6Jh7KT/20251230-010942.jpg"><div class="caption">Her cuteeness ❤️</div></div>
+            <div class="polaroid hover-lift" onclick="showImg(this)"><img src="https://i.postimg.cc/VNHNNYWQ/20251230-011557.jpg"><div class="caption">Her beautiness! 😈</div></div>
+            <div class="polaroid hover-lift" onclick="showImg(this)"><img src="https://i.postimg.cc/NM4pXzF7/20251230-011848.jpg"><div class="caption">Her eyes ✨</div></div>
+            <div class="polaroid hover-lift" onclick="showImg(this)"><img src="https://i.postimg.cc/43G61QD3/Ishika.jpg"><div class="caption">Her kamarr ❤️</div></div>
+        </div> 
+        
+        <button onclick="toggleSurprise(true)" class="royal-btn pulse-button">✨ Unveil Your Magic Boxes 🎁</button>
+    </div>
+
+    <div id="surprise-page">
+        <h2 class="floating-title">Magic Boxes! 🎁</h2>
+        <div class="reasons-grid">
+            <div class="reason-card" onclick="openBox(this)"><div class="card-inner"><div class="card-front">🎁<p>Pure Heart</p></div><div class="card-back">💝<p>Tum jaisa saaf dil wala dost milna kismat hai!</p></div></div></div>
+            <div class="reason-card" onclick="openBox(this)"><div class="card-inner"><div class="card-front">🎁<p>True Bond</p></div><div class="card-back">🥺<p>Hamesha saath rehna!</p></div></div></div>
+            <div class="reason-card" onclick="openBox(this)"><div class="card-inner"><div class="card-front">🎁<p>Funny Side</p></div><div class="card-back">😂<p>Thodi pagal ho par pyari ho!</p></div></div></div>
+            <div class="reason-card" onclick="openBox(this)"><div class="card-inner"><div class="card-front">🎁<p>Promise</p></div><div class="card-back">🫂<p>Hamari dosti kabhi nahi badlegi!</p></div></div></div>
+        </div>
+        <div class="action-buttons">
+            <button onclick="smoothToContract()" class="royal-btn gold-shimmer">📜 Sign The Sacred Contract</button>
+            <button onclick="toggleSurprise(false)" class="back-museum-btn">Back to Museum 🏛️</button>
+        </div>
+    </div>
+
+    <div id="contract-screen">
+        <div class="contract-card">
+            <div class="seal">SUPREME BFF<br>VERIFIED</div>
+            <h1 class="contract-title">Dosti Contract</h1>
+            <div class="terms-container">
+                <label class="term-item"><input type="checkbox" class="term-check"><span><b>Clause I:</b> me tumhari medemjii,darling,baby,maa,suarii,kuttiya ye sab huu. 🪵</span></label><p>
+                <label class="term-item"><input type="checkbox" class="term-check"><span><b>Clause II:</b> tumhare alawa mera koi bhi male best frnd nhi banega 🧠</span></label><p>
+                <label class="term-item"><input type="checkbox" class="term-check"><span><b>Clause III:</b> No Block, No Ignored! me inn dono me se kuch nhi karungi🚫</span></label><p>
+            </div>
+            <div class="sig-section" id="sigSection">
+                <canvas id="sig-canvas"></canvas>
+                <div class="sig-controls">
+                    <button onclick="clearCanvas()" class="clear-btn">Clear</button>
+                    <button id="finalBtn" onclick="confirmSignature()" disabled class="seal-btn">Seal Deal 🤝</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="final-overlay">
+        <h1 class="glow-text" style="color:#d4af37">Dosti Pakki Rahi! ❤️</h1>
+        <p>Ab tum phas gayi ho forever! 😂🫂</p>
+        <button onclick="startLoveCode()" class="next-surprise-btn">Ek Chota sa Question... 👉</button>
+    </div>
+
+    <div id="love-surprise-section">
+        <div class="love-container">
+            <h1 id="question">Do you love me? ❤️</h1>
+            <p id="message">Please sacchi bolna!</p>
+            <div class="love-buttons" id="btnGroup">
+                <button id="yesBtn" class="love-btn" onclick="celebrate()">Yes</button>
+                <button id="noBtn" class="love-btn" onmouseover="moveButton()" onclick="moveButton()">No</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="lightbox" onclick="this.style.display='none'"><img id="lb-img"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+<style>:root { 
+    --pink: #ff477e; 
+    --dark-pink: #d81b60; 
+    --glass: rgba(255, 255, 255, 0.15); 
+    --gold: #d4af37; 
+    --wine: #722f37; 
+    --cream: #fffdf0; 
+}
+
+/* Base Styles */
+body, html { 
+    margin: 0; padding: 0; width: 100%; min-height: 100vh; 
+    font-family: 'Poppins', sans-serif; 
+    background: linear-gradient(135deg, #1a1a2e 0%, #d81b60 100%); 
+    color: white; overflow-x: hidden; scroll-behavior: smooth;
+}
+
+/* Background Animations */
+.sparkles-bg { 
+    position: fixed; inset: 0; pointer-events: none; 
+    background-image: radial-gradient(white 1px, transparent 1px); 
+    background-size: 40px 40px; opacity: 0.15; z-index: 0; 
+}
+
+.particle {
+    position: fixed; background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%; pointer-events: none; z-index: 0;
+    animation: moveUp 8s linear infinite;
+}
+
+@keyframes moveUp {
+    0% { transform: translateY(100vh) scale(0); opacity: 0; }
+    50% { opacity: 0.4; }
+    100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+}
+
+/* Overlays & Containers */
+#pass-overlay { 
+    position: fixed; inset: 0; z-index: 10000; 
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); 
+    display: flex; justify-content: center; align-items: center; 
+    transition: 1s cubic-bezier(0.85, 0, 0.15, 1); 
+}
+
+.glass-card { 
+    background: var(--glass); backdrop-filter: blur(20px); 
+    padding: 30px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.2); 
+    text-align: center; width: 85%; max-width: 400px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+/* Photo & Animations */
+.photo-frame { 
+    width: 160px; height: 160px; border: 4px solid white; 
+    border-radius: 50%; margin: 0 auto 20px; overflow: hidden; 
+    animation: pulse 2s infinite; box-shadow: 0 0 20px var(--pink);
+}
+.photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+@keyframes pulse { 
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); } 
+    70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); } 
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } 
+}
+
+/* Timer */
+.timer-box { display: flex; justify-content: center; gap: 8px; margin: 20px 0; }
+.timer-segment { background: white; padding: 10px; border-radius: 12px; min-width: 55px; transform: skewX(-5deg); transition: 0.3s; }
+.timer-val { color: var(--dark-pink); font-weight: 800; display: block; font-size: 1.2rem; }
+.timer-label { color: #888; font-size: 0.6rem; text-transform: uppercase; }
+
+/* Interactive Elements */
+input[type="password"] { 
+    padding: 12px; border-radius: 25px; border: 2px solid transparent; 
+    width: 80%; text-align: center; margin-bottom: 15px; outline: none;
+    transition: 0.3s; background: rgba(255,255,255,0.9);
+}
+input[type="password"]:focus { border-color: var(--pink); box-shadow: 0 0 10px var(--pink); }
+
+.unlock-btn { 
+    padding: 12px 35px; background: var(--pink); color: white; border: none; 
+    border-radius: 25px; cursor: pointer; font-weight: bold; transition: 0.3s;
+}
+.unlock-btn:hover:not(:disabled) { transform: scale(1.1); background: var(--dark-pink); }
+
+/* Main Content & Gallery */
+#main-content { display: none; padding: 20px; text-align: center; }
+.glow-text { 
+    font-family: 'Dancing Script'; font-size: 3rem; 
+    animation: glow 1.5s infinite alternate; margin-bottom: 10px;
+}
+@keyframes glow { 
+    from { text-shadow: 0 0 10px #fff, 0 0 20px var(--pink); } 
+    to { text-shadow: 0 0 20px #fff, 0 0 40px var(--pink); } 
+}
+
+.gallery-container { 
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 25px; margin-top: 30px; padding: 10px;
+}
+.polaroid { 
+    background: white; padding: 12px; border-radius: 5px; color: #333; 
+    cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+.polaroid img { width: 100%; height: 280px; object-fit: cover; border-radius: 2px; }
+.hover-lift:hover { transform: translateY(-15px) rotate(2deg) scale(1.05); }
+
+/* Magic Boxes */
+#surprise-page { 
+    display:none; position:fixed; inset:0; z-index:20000; 
+    background: #1a1a2e; flex-direction:column; align-items:center; justify-content:center; 
+}
+.reasons-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 90%; max-width: 400px; }
+.reason-card { height: 160px; perspective: 1000px; cursor: pointer; }
+.card-inner { position: relative; width: 100%; height: 100%; transition: 0.6s; transform-style: preserve-3d; }
+.reason-card.open .card-inner { transform: rotateY(180deg); }
+.card-front, .card-back { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.card-front { background: var(--pink); border: 2px solid rgba(255,255,255,0.2); font-size: 1.5rem; }
+.card-back { background: white; color: #333; transform: rotateY(180deg); padding: 15px; text-align: center; font-weight: bold; }
+
+/* Buttons & Special Effects */
+.royal-btn { 
+    margin-top: 40px; padding: 15px 35px; border: none; border-radius: 50px; 
+    color: white; font-weight: bold; cursor: pointer; transition: 0.3s;
+    background: linear-gradient(45deg, #ff477e, #ffd700);
+}
+.gold-shimmer { 
+    background: linear-gradient(45deg, #d4af37, #fffdf0, #d4af37) !important;
+    background-size: 200% auto !important; animation: shimmer 3s linear infinite;
+    color: #2c041c !important;
+}
+@keyframes shimmer { to { background-position: 200% center; } }
+
+.pulse-button { animation: btnPulse 2s infinite; }
+@keyframes btnPulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 71, 126, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(255, 71, 126, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 71, 126, 0); }
+}
+
+/* Contract Styles */
+#contract-screen { 
+    display: none; position: fixed; inset: 0; z-index: 30000; 
+    background: radial-gradient(circle, #2c041c 0%, #000000 100%); 
+    justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: 0.8s; 
+}
+.contract-card { background: var(--cream); width: 100%; max-width: 450px; padding: 25px; border-radius: 20px; border: 8px double var(--gold); position: relative; color: #333; }
+.contract-title { font-family: 'Dancing Script'; color: var(--wine); text-align: center; border-bottom: 2px solid var(--gold); }
+#sig-canvas { width: 100%; height: 150px; background: #fff; border: 1px solid #ddd; border-radius: 10px; touch-action: none; margin-top: 10px; }
+.sig-section { opacity: 0.3; pointer-events: none; transition: 0.5s; }
+.sig-section.active { opacity: 1; pointer-events: auto; }
+
+/* Love Surprise Section */
+#love-surprise-section { 
+    display: none; position: fixed; inset: 0; z-index: 99999; 
+    background-color: #ffeef8; flex-direction: column; justify-content: center; align-items: center; 
+}
+.love-container { background: white; padding: 40px; border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 320px; color: #333; text-align: center;}
+.love-btn { padding: 10px 25px; font-size: 18px; border: none; border-radius: 15px; cursor: pointer; font-weight: bold; transition: 0.2s; margin: 10px; }
+#yesBtn { background-color: #4CAF50; color: white; }
+#noBtn { background-color: #f44336; color: white; position: relative; }
+
+/* Helpers */
+#final-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 40000; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+#lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 50000; }
+#lightbox img { max-width: 90%; border: 5px solid white; box-shadow: 0 0 30px white; }
+</style><script>// 1. Background Particles & Hearts
+function initParticles() {
+    const container = document.getElementById('particle-container');
+    for (let i = 0; i < 20; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = Math.random() * 15 + 5 + 'px';
+        p.style.width = size;
+        p.style.height = size;
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.animationDuration = Math.random() * 5 + 5 + 's';
+        p.style.animationDelay = Math.random() * 5 + 's';
+        container.appendChild(p);
+    }
+}
+
+function createHeart() {
+    const heart = document.createElement('div');
+    heart.style.position = 'fixed'; heart.style.top = '-10vh';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.innerHTML = ['❤️', '💖', '💝', '💕', '💗', '🌸'][Math.floor(Math.random() * 6)];
+    heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+    heart.style.transition = `transform ${Math.random() * 3 + 2}s linear`;
+    heart.style.zIndex = '10001';
+    document.body.appendChild(heart);
+    setTimeout(() => { heart.style.transform = `translateY(110vh) rotate(${Math.random() * 360}deg)`; }, 100);
+    setTimeout(() => heart.remove(), 5000);
+}
+
+// 2. Birthday Countdown Logic
+const targetDate = new Date("February 3, 2025 00:00:00").getTime();
+const timerInt = setInterval(() => {
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+    
+    if (distance <= 0) {
+        document.getElementById("countdown-timer").innerHTML = "<h2 style='color:#ff477e; animation: pulse 1s infinite;'>Happy Birthday Pookie! 🎉</h2>";
+        document.getElementById("unlockBtn").disabled = false;
+        document.getElementById("entryPass").disabled = false;
+        document.getElementById("unlockBtn").innerText = "Unlock 🔓";
+        clearInterval(timerInt);
+    } else {
+        const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((distance % (1000 * 60)) / 1000);
+        document.getElementById("days").innerText = d < 10 ? "0"+d : d;
+        document.getElementById("hours").innerText = h < 10 ? "0"+h : h;
+        document.getElementById("mins").innerText = m < 10 ? "0"+m : m;
+        document.getElementById("secs").innerText = s < 10 ? "0"+s : s;
+    }
+}, 1000);
+
+// 3. Unlock Logic
+function verify() {
+    const val = document.getElementById('entryPass').value.toLowerCase().trim();
+    if(val === "pookie") {
+        confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+        document.getElementById('pass-overlay').style.opacity = '0'; 
+        setTimeout(() => { 
+            document.getElementById('pass-overlay').style.display = 'none';
+            const main = document.getElementById('main-content');
+            main.style.display = 'block';
+        }, 1000); 
+    } else { 
+        const box = document.getElementById('pass-container');
+        box.style.animation = 'shake 0.5s ease';
+        setTimeout(() => box.style.animation = '', 500);
+        document.getElementById('hint').style.display = 'block'; 
+    }
+}
+
+// 4. UI Navigations
+function toggleSurprise(show) { 
+    document.getElementById('surprise-page').style.display = show ? 'flex' : 'none'; 
+    document.getElementById('main-content').style.display = show ? 'none' : 'block'; 
+}
+
+function openBox(el) { 
+    el.classList.toggle('open'); 
+    if(el.classList.contains('open')) confetti({ particleCount: 40, spread: 70 }); 
+}
+
+function showImg(el) { 
+    document.getElementById('lb-img').src = el.querySelector('img').src; 
+    document.getElementById('lightbox').style.display = 'flex'; 
+}
+
+function smoothToContract() { 
+    document.getElementById('surprise-page').style.display = 'none'; 
+    document.getElementById('contract-screen').style.display = 'flex'; 
+    setTimeout(() => { document.getElementById('contract-screen').style.opacity = '1'; setupCanvas(); }, 100); 
+}
+
+// 5. Canvas Drawing Logic
+const canvas = document.getElementById('sig-canvas');
+const ctx = canvas.getContext('2d');
+let drawing = false;
+
+function setupCanvas() {
+    canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+    ctx.strokeStyle = "#1a1a2e"; ctx.lineWidth = 3; ctx.lineCap = "round";
+}
+
+document.querySelectorAll('.term-check').forEach(box => { 
+    box.addEventListener('change', () => { 
+        const allChecked = Array.from(document.querySelectorAll('.term-check')).every(c => c.checked);
+        if (allChecked) {
+            document.getElementById('sigSection').classList.add('active');
+            document.getElementById('finalBtn').disabled = false;
+        }
+    }); 
+});
+
+function getPos(e) { 
+    let rect = canvas.getBoundingClientRect(); 
+    const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+    const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+    return { x: clientX - rect.left, y: clientY - rect.top }; 
+}
+
+canvas.addEventListener('mousedown', (e) => { drawing = true; ctx.beginPath(); let p = getPos(e); ctx.moveTo(p.x, p.y); });
+canvas.addEventListener('mousemove', (e) => { if(!drawing) return; let p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); });
+window.addEventListener('mouseup', () => drawing = false);
+canvas.addEventListener('touchstart', (e) => { drawing = true; let p = getPos(e); ctx.moveTo(p.x, p.y); e.preventDefault(); }, {passive:false});
+canvas.addEventListener('touchmove', (e) => { if(!drawing) return; let p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); e.preventDefault(); }, {passive:false});
+
+function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+function confirmSignature() { 
+    confetti({ particleCount: 200, spread: 150 }); 
+    setTimeout(() => document.getElementById('final-overlay').style.display = 'flex', 800); 
+}
+
+// 6. Love Surprise Logic
+function startLoveCode() {
+    document.getElementById('final-overlay').style.display = 'none';
+    document.getElementById('love-surprise-section').style.display = 'flex';
+}
+
+let moveCount = 0;
+function moveButton() {
+    moveCount++;
+    const msg = document.getElementById('message');
+    if (moveCount === 1) msg.innerText = "Ek baar phir soch lo... 🤔";
+    else if (moveCount === 2) msg.innerText = "Itna gussa? Ek chance toh banta hai! 🥺";
+    else if (moveCount >= 4) {
+        msg.innerText = "Ab pakad ke dikhao! 😂";
+        const btn = document.getElementById('noBtn');
+        const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+        const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+        btn.style.position = 'fixed'; btn.style.left = x + 'px'; btn.style.top = y + 'px';
+    }
+}
+
+function celebrate() {
+    document.getElementById('question').innerText = "I Knew It! ✨💖";
+    document.getElementById('message').innerText = "chall ooye suariyaa muuh dheki ho apana i";
+    document.getElementById('btnGroup').style.display = 'none';
+    confetti({ particleCount: 300, spread: 200 });
+}
+
+// Initialization
+window.onload = () => {
+    initParticles();
+    setInterval(createHeart, 300);
+};
+
+// Shake Animation Style Injection
+const style = document.createElement('style');
+style.innerHTML = `@keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-10px);} 75% {transform: translateX(10px);} }`;
+document.head.appendChild(style);
+</script>
